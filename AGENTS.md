@@ -2,7 +2,7 @@
 - Project name: FPSInheritance
 - Unity version: Unity 6000.0.66f2
 - Active game object:
-  - Name: Shotgun Bullet
+  - Name: Directional Light
   - Tag: Untagged
-  - Layer: Player Damage
+  - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
