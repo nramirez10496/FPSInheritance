@@ -3,6 +3,7 @@ using UnityEngine;
 public class Shotgun : Gun
 {
     [SerializeField] GameObject prefabShotgunBlast;//for shotgun blast particles
+  
     public override bool AttemptFire()
     {
         if (!base.AttemptFire())
