@@ -61,7 +61,7 @@ public class FPSController : MonoBehaviour
         Vector3 noVelocity = new Vector3(0, velocity.y, 0);
         velocity = Vector3.Lerp(velocity, noVelocity, 5 * Time.deltaTime);
     }
-
+    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     void Movement()
     {
         grounded = controller.isGrounded;
@@ -74,6 +74,7 @@ public class FPSController : MonoBehaviour
         Vector2 movement = GetPlayerMovementVector();
         Vector3 move = transform.right * movement.x + transform.forward * movement.y;
         controller.Move(move * movementSpeed * (GetSprint() ? 2 : 1) * Time.deltaTime);
+        //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (Input.GetButtonDown("Jump") && grounded)
         {
@@ -189,22 +190,22 @@ public class FPSController : MonoBehaviour
     }
 
     // Input methods
-
+    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     bool GetPressFire()
     {
         return Input.GetButtonDown("Fire1");
     }
-
+    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     bool GetHoldFire()
     {
         return Input.GetButton("Fire1");
     }
-
+    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     bool GetPressAltFire()
     {
         return Input.GetButtonDown("Fire2");
     }
-
+    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Vector2 GetPlayerMovementVector()
     {
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
