@@ -10,9 +10,10 @@ public class FPSController : MonoBehaviour
     Vector2 moveInput;//for movement
     Vector2 lookInput;//for aim
     public bool isGrounded;
+    bool firePressed;
 
     // references
-    CharacterController controller;
+    //CharacterController controller;
     [SerializeField] GameObject cam;
     [SerializeField] Transform gunHold;
     [SerializeField] Gun initialGun;
@@ -48,7 +49,7 @@ public class FPSController : MonoBehaviour
         //New input system
         rb = GetComponent<Rigidbody>();
 
-        controller = GetComponent<CharacterController>();
+        //controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
         // start with a gun
@@ -129,7 +130,7 @@ public class FPSController : MonoBehaviour
         moveInput = ctx.ReadValue<Vector2>();
     }
 
-
+    //update for new system
     void Look()
     {
         Vector2 looking = lookInput;
@@ -168,6 +169,7 @@ public class FPSController : MonoBehaviour
         }
     }
 
+    //update for new system
     void FireGun()
     {
         // don't fire if we don't have a gun
@@ -175,23 +177,24 @@ public class FPSController : MonoBehaviour
             return;
 
         // pressed the fire button
-        if(GetPressFire())
+        if(firePressed)
         {
             currentGun?.AttemptFire();
+            //firePressed = false;
         }
 
         // holding the fire button (for automatic)
-        else if(GetHoldFire())
+        /*else if(fireHold)
         {
             if (currentGun.AttemptAutomaticFire())
                 currentGun?.AttemptFire();
-        }
+        }*/
 
         // pressed the alt fire button
-        if (GetPressAltFire())
+        /*if (GetPressAltFire())
         {
             currentGun?.AttemptAltFire();
-        }
+        }*/
     }
 
     void EquipGun(Gun g)
@@ -235,20 +238,46 @@ public class FPSController : MonoBehaviour
 
     // Input methods
 
-    bool GetPressFire()
+    //remove old input system
+    /*bool GetPressFire()
     {
         return Input.GetButtonDown("Fire1");
+    }*/
+
+    //New fire input system
+    public void OnFire(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            firePressed = true;
+        }
+        if (ctx.canceled)
+        {
+            firePressed = false;
+        }
     }
 
-    bool GetHoldFire()
+    //remove old input system
+    /*bool GetHoldFire()
     {
         return Input.GetButton("Fire1");
-    }
+    }*/
 
-    bool GetPressAltFire()
+    //remove old input system
+    /*bool GetPressAltFire()
     {
         return Input.GetButtonDown("Fire2");
+    }*/
+
+    //New alt fire input system
+    public void OnAltFire(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            currentGun?.AttemptAltFire();
+        }
     }
+
 
     //remove old input system
     /*Vector2 GetPlayerMovementVector()
@@ -262,7 +291,7 @@ public class FPSController : MonoBehaviour
         return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }*/
 
-    //New move input system
+    //New aim input system
     public void HandleLook(InputAction.CallbackContext ctx)
     {
         lookInput = ctx.ReadValue<Vector2>();
