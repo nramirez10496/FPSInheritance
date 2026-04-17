@@ -7,7 +7,8 @@ public class FPSController : MonoBehaviour
 {
     // for new input sustem 
     Rigidbody rb;
-    Vector2 moveInput;
+    Vector2 moveInput;//for movement
+    Vector2 lookInput;//for aim
     public bool isGrounded;
 
     // references
@@ -131,7 +132,7 @@ public class FPSController : MonoBehaviour
 
     void Look()
     {
-        Vector2 looking = GetPlayerLook();
+        Vector2 looking = lookInput;
         float lookX = looking.x * lookSensitivityX * Time.deltaTime;
         float lookY = looking.y * lookSensitivityY * Time.deltaTime;
 
@@ -255,9 +256,16 @@ public class FPSController : MonoBehaviour
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }*/
 
-    Vector2 GetPlayerLook()
+    //remove old input system
+    /*Vector2 GetPlayerLook()
     {
         return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+    }*/
+
+    //New move input system
+    public void HandleLook(InputAction.CallbackContext ctx)
+    {
+        lookInput = ctx.ReadValue<Vector2>();
     }
 
     bool GetSprint()
