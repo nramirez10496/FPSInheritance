@@ -2,7 +2,7 @@
 - Project name: FPSInheritance
 - Unity version: Unity 6000.0.66f2
 - Active game object:
-  - Name: GrenadeLauncher
+  - Name: Player
   - Tag: Untagged
-  - Layer: Default
+  - Layer: Player
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;//for new input system
 
 public class FPSController : MonoBehaviour
 {
+    // for new input sustem 
+    Rigidbody rb;
+    Vector2 moveInput;
+    public bool isGrounded;
+
     // references
     CharacterController controller;
     [SerializeField] GameObject cam;
@@ -38,6 +44,9 @@ public class FPSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //New input system
+        rb = GetComponent<Rigidbody>();
+
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -51,7 +60,7 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        //Movement(); //old input system
         Look();
         HandleSwitchGun();
         FireGun();
@@ -61,8 +70,18 @@ public class FPSController : MonoBehaviour
         Vector3 noVelocity = new Vector3(0, velocity.y, 0);
         velocity = Vector3.Lerp(velocity, noVelocity, 5 * Time.deltaTime);
     }
-    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    void Movement()
+
+    //New move input system
+    private void FixedUpdate()
+    {
+        //to keep movement relative to camera
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        Vector3 targetVelocity = new Vector3(move.x * movementSpeed, rb.linearVelocity.y, move.z * movementSpeed);
+        rb.linearVelocity = targetVelocity;
+    }
+
+    //remove old input system
+    /*void Movement()
     {
         grounded = controller.isGrounded;
 
@@ -74,7 +93,6 @@ public class FPSController : MonoBehaviour
         Vector2 movement = GetPlayerMovementVector();
         Vector3 move = transform.right * movement.x + transform.forward * movement.y;
         controller.Move(move * movementSpeed * (GetSprint() ? 2 : 1) * Time.deltaTime);
-        //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (Input.GetButtonDown("Jump") && grounded)
         {
@@ -84,7 +102,32 @@ public class FPSController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }*/
+
+    //New jump ground check 
+    private void OnCollisionStay(Collision collision)
+    {
+        isGrounded = true;
     }
+    private void OnCollisionExit(Collision collision)
+    {
+        isGrounded = false;
+    }
+    //New jump input system
+    public void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    //New move input system
+    public void HandleMovement(InputAction.CallbackContext ctx)
+    {
+        moveInput = ctx.ReadValue<Vector2>();
+    }
+
 
     void Look()
     {
@@ -190,26 +233,27 @@ public class FPSController : MonoBehaviour
     }
 
     // Input methods
-    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     bool GetPressFire()
     {
         return Input.GetButtonDown("Fire1");
     }
-    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     bool GetHoldFire()
     {
         return Input.GetButton("Fire1");
     }
-    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     bool GetPressAltFire()
     {
         return Input.GetButtonDown("Fire2");
     }
-    //CHANGE TO NEW INPUT SYSTEM/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Vector2 GetPlayerMovementVector()
+
+    //remove old input system
+    /*Vector2 GetPlayerMovementVector()
     {
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-    }
+    }*/
 
     Vector2 GetPlayerLook()
     {
