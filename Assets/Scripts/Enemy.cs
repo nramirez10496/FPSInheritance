@@ -22,16 +22,17 @@ public class Enemy : MonoBehaviour
     [SerializeField]EnemyStates enemyCurrentState;
 
     //AI variables
-    [SerializeField] float wanderRange = 5f;//how far from the starting point should the enemy be allowed to wander
+    [SerializeField] float wanderRange = 10f;//how far from the starting point should the enemy be allowed to wander
     Vector3 startingLocation; //enemy’s starting location, set on start/spawn
     [SerializeField] float playerSightRange =4f; //how close should the player have to be for the enemy to see 
-    [SerializeField] float playerAttackRange = 1f;//how close should the player be before the enemy will lunge at them
+    [SerializeField] float playerAttackRange = 2f;//how close should the player be before the enemy will lunge at them
     [SerializeField] float currentStateElapsed = 0f; //how much time has passed in the current state (reset on changing state)
-    [SerializeField] float recoveryTime = 1f;//how long should the recovery state last before the enemy switches back
+    [SerializeField] float recoveryTime = 3f;//how long should the recovery state last before the enemy switches back
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform target;
     float distanceToTarget;//distance of enemy to player 
     Vector3 wanderPoint;//point enemy wanders to
+    bool hasAttacked = false;//flag for attack starts at no
 
     // Start is called before the first frame update
     void Start()
@@ -111,7 +112,7 @@ public class Enemy : MonoBehaviour
         //enemy is close to player, pursue
         if (distanceToTarget <= playerSightRange)
         {
-            WanderToPursue();
+            WanderToPursue();//begin pursue
             return;
         }
 
@@ -132,13 +133,13 @@ public class Enemy : MonoBehaviour
         //enemy is close enough to attack, attack
         if (distanceToTarget <= playerAttackRange)
         {
-            PursueToAttack();
+            PursueToAttack();//attack
         }
 
         //enemy is not close to player, return to wander
         else if(distanceToTarget > playerSightRange)
         {
-            PursueToWander();
+            PursueToWander();//wander
         }
     }
 
@@ -150,15 +151,21 @@ public class Enemy : MonoBehaviour
         //recovery time is over, cont pursue
         if (currentStateElapsed >= recoveryTime)
         {
-            RecoveryToPursue();
+            RecoveryToPursue();//pursue after recovery
         }
     }
 
     void UpdateAttack()
     {
-        Debug.Log("ATTACK!");
-
-        AttackToRecovery();
+        //attack only when not already attacking
+        if(!hasAttacked)
+        {
+            hasAttacked = true;//flag is now true attack happens
+            agent.isStopped = true;//enemy stops movement
+            Vector3 attackDirection = (target.position - transform.position).normalized;//direct towards player
+            Rigidbody.AddForce(attackDirection* 7f, ForceMode.Impulse);//lunge at player
+            Invoke("AttackToRecovery", 0.5f);//recover secs after lunge
+        }
     }
 
     //transition states
@@ -169,9 +176,10 @@ public class Enemy : MonoBehaviour
     }
 
     void PursueToAttack()
-    { 
+    {
         enemyCurrentState = EnemyStates.attack;
         currentStateElapsed = 0f;
+        hasAttacked = false;//no longer attakcing
     }
 
     void AttackToRecovery()
@@ -190,5 +198,15 @@ public class Enemy : MonoBehaviour
     {
         enemyCurrentState = EnemyStates.wander;
         currentStateElapsed = 0f;
+    }
+
+    //player damage detector (enemy and player collide)
+    private void OnCollisionEnter(Collision collision)
+    {
+        //enemy hits the player
+        if (collision.transform.root.CompareTag("Player"))
+        {
+            Debug.Log("Player was hit!");//show player was hit
+        }
     }
 }

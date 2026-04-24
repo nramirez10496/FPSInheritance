@@ -319,6 +319,6 @@ public class FPSController : MonoBehaviour
             Respawn();
         }
     }
-
+  
 
 }
