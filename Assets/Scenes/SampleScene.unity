@@ -443,7 +443,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -2361,7 +2361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1106380658
 Transform:
   m_ObjectHideFlags: 0
@@ -6550,7 +6550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2907611458581148241, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2907611458581148241, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6590,7 +6590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2907611458581148244, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: agent
@@ -6601,8 +6601,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2071811435}
     - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
+      propertyPath: recoveryTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
+      propertyPath: playerSightRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: enemyCurrentState
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
+      propertyPath: playerAttackRange
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2907611458581148245, guid: 04893e3ecd62fd54bbd633891b596cac, type: 3}
       propertyPath: damageNumberPrefab
