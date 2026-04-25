@@ -80,6 +80,8 @@ public class FPSController : MonoBehaviour
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         Vector3 targetVelocity = new Vector3(move.x * movementSpeed, rb.linearVelocity.y, move.z * movementSpeed);
         rb.linearVelocity = targetVelocity;
+
+        rb.angularVelocity = Vector3.zero;//stop camera rotation
     }
 
     //remove old input system
